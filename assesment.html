@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeMaster - Programming Tutor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #7c3aed;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #06b6d4;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --white: #ffffff;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 15px;
+        }
+
+        .logo i {
+            font-size: 36px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .logo h1 {
+            font-size: 32px;
+            font-weight: 800;
+        }
+
+        .tagline {
+            font-size: 18px;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: var(--white);
+            border: 2px solid var(--gray-light);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .nav-tab:hover:not(.active) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Subjects Grid */
+        .subjects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .subject-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 25px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .subject-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .subject-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow);
+        }
+
+        .subject-card.active {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
+        }
+
+        .subject-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            display: inline-block;
+            width: 70px;
+            height: 70px;
+            line-height: 70px;
+            text-align: center;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+        }
+
+        .subject-card h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        /* Problem Solver */
+        .problem-solver {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        .problem-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--gray-light);
+        }
+
+        .subject-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 180px;
+            padding: 20px;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            resize: vertical;
+            transition: var(--transition);
+            margin: 20px 0;
+            background: var(--light);
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            background: var(--white);
+        }
+
+        .examples {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .example-btn {
+            padding: 10px 20px;
+            background: var(--light);
+            border: 1px solid var(--gray-light);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .example-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .solve-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+            font-weight: 700;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .solve-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--white);
+            margin: 40px auto;
+            width: 90%;
+            max-width: 1000px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .close-modal {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 30px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        /* Theory Sections */
+        .theory-section {
+            background: var(--light);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid var(--primary);
+        }
+
+        .theory-section h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theory-points {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .theory-points li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 10px;
+        }
+
+        .theory-points li::before {
+            content: '•';
+            color: var(--primary);
+            font-weight: bold;
+            position: absolute;
+            left: -15px;
+        }
+
+        .definition {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid var(--gray-light);
+        }
+
+        .example-practical {
+            background: #fffbeb;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid var(--warning);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .theoretical-answer {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid var(--success);
+        }
+
+        /* Saved Solutions Section */
+        .saved-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+        }
+
+        .saved-items {
+            margin-top: 20px;
+        }
+
+        .saved-item {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--success);
+            transition: var(--transition);
+        }
+
+        .saved-item:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
+        }
+
+        .saved-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .saved-item-subject {
+            background: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .saved-item-notes {
+            background: #fffbeb;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border-left: 3px solid var(--warning);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: var(--gray-light);
+        }
+
+        /* Notes Modal */
+        .notes-modal {
+            background: var(--white);
+            padding: 25px;
+            border-radius: var(--radius);
+            margin-top: 20px;
+            border: 2px solid var(--warning);
+        }
+
+        .notes-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid var(--gray-light);
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 15px 0;
+        }
+
+        .notes-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .notes-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .save-notes-btn {
+            background: var(--success);
+            color: white;
+        }
+
+        .cancel-notes-btn {
+            background: var(--gray-light);
+            color: var(--dark);
+        }
+
+        /* Actions */
+        .actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 15px 30px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 180px;
+            justify-content: center;
+        }
+
+        .save-btn {
+            background: var(--success);
+            color: white;
+        }
+
+        .new-btn {
+            background: var(--white);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .notes-btn {
+            background: var(--white);
+            color: var(--warning);
+            border: 2px solid var(--warning);
+        }
+
+        /* Message */
+        .message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        .message.success {
+            background: var(--success);
+        }
+
+        .message.error {
+            background: var(--danger);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .subjects {
+                grid-template-columns: 1fr;
+            }
+            
+            .problem-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .saved-item-header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-code"></i>
+                <h1>CodeMaster</h1>
+            </div>
+            <p class="tagline">Learn programming concepts with detailed explanations and examples</p>
+        </header>
+
+        <nav class="nav-tabs">
+            <div class="nav-tab active" onclick="showSection('ask')">
+                <i class="fas fa-question-circle"></i>
+                Ask Question
+            </div>
+            <div class="nav-tab" onclick="showSection('saved')">
+                <i class="fas fa-save"></i>
+                Saved Solutions
+                <span id="savedCount" class="badge">0</span>
+            </div>
+        </nav>
+
+        <!-- Ask Question Section -->
+        <section id="ask-section" class="content-section active">
+            <div class="subjects">
+                <div class="subject-card active" onclick="selectSubject('c')">
+                    <div class="subject-icon">📝</div>
+                    <h3>C Programming</h3>
+                    <p>Low-level programming with memory management</p>
+                </div>
+                
+                <div class="subject-card" onclick="selectSubject('htmlcss')">
+                    <div class="subject-icon">🎨</div>
+                    <h3>HTML & CSS</h3>
+                    <p>Web design, layout, and styling</p>
+                </div>
+                
+                <div class="subject-card" onclick="selectSubject('javascript')">
+                    <div class="subject-icon">⚡</div>
+                    <h3>JavaScript</h3>
+                    <p>Client-side scripting and web development</p>
+                </div>
+                
+                <div class="subject-card" onclick="selectSubject('python')">
+                    <div class="subject-icon">🐍</div>
+                    <h3>Python</h3>
+                    <p>High-level programming with AI/ML capabilities</p>
+                </div>
+                
+                <div class="subject-card" onclick="selectSubject('ds')">
+                    <div class="subject-icon">📊</div>
+                    <h3>Data Structures</h3>
+                    <p>Efficient data organization and storage</p>
+                </div>
+                
+                <div class="subject-card" onclick="selectSubject('algo')">
+                    <div class="subject-icon">🔍</div>
+                    <h3>Algorithms</h3>
+                    <p>Problem-solving procedures and optimization</p>
+                </div>
+                
+                <div class="subject-card" onclick="selectSubject('react')">
+                    <div class="subject-icon">⚛️</div>
+                    <h3>React.js</h3>
+                    <p>UI library for building web applications</p>
+                </div>
+            </div>
+
+            <div class="problem-solver">
+                <div class="problem-header">
+                    <div class="subject-badge" id="currentSubject">
+                        <i class="fas fa-code"></i>
+                        <span>C Programming</span>
+                    </div>
+                    <h2>Ask a Theoretical Question</h2>
+                </div>
+                
+                <textarea id="problemInput" placeholder="Type your theoretical question here... Example: 'What are pointers in C?' or 'Explain CSS Box Model'"></textarea>
+                
+                <div class="examples" id="examples"></div>
+                
+                <button class="solve-btn" onclick="solveProblem()">
+                    <i class="fas fa-rocket"></i>
+                    Get Detailed Explanation
+                </button>
+            </div>
+        </section>
+
+        <!-- Saved Solutions Section -->
+        <section id="saved-section" class="content-section">
+            <div class="saved-section">
+                <h2><i class="fas fa-save"></i> Saved Solutions & Notes</h2>
+                <p>All your saved questions and personal notes appear here</p>
+                
+                <div class="saved-items" id="savedItems">
+                    <!-- Saved items will be dynamically inserted here -->
+                    <div class="empty-state" id="emptySavedState">
+                        <i class="fas fa-inbox"></i>
+                        <h3>No saved solutions yet</h3>
+                        <p>Ask questions and save them to see them here</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Solution Modal -->
+        <div class="modal" id="solutionModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-lightbulb"></i> <span id="modalTitle">Complete Solution</span></h2>
+                    <button class="close-modal" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="modal-body" id="modalBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Current state
+        let currentSubject = 'c';
+        let currentProblem = '';
+        let savedSolutions = JSON.parse(localStorage.getItem('savedSolutions')) || [];
+        let currentSolution = null;
+
+        // Subject configurations
+        const subjects = {
+            'c': {
+                name: 'C Programming',
+                icon: '📝',
+                color: '#2563eb',
+                examples: [
+                    'What are pointers in C?',
+                    'Explain malloc() and free() functions',
+                    'Difference between structure and union',
+                    'What are arrays in C? Explain with example',
+                    'Explain functions in C programming',
+                    'What are structures in C?',
+                    'Explain file handling in C',
+                    'What is recursion? Give example'
+                ]
+            },
+            'htmlcss': {
+                name: 'HTML & CSS',
+                icon: '🎨',
+                color: '#7c3aed',
+                examples: [
+                    'Explain CSS Box Model',
+                    'Difference between Flexbox and Grid',
+                    'What are CSS pseudo-classes?',
+                    'Explain CSS specificity',
+                    'What is semantic HTML?',
+                    'Explain responsive web design',
+                    'What are CSS animations?',
+                    'Explain CSS positioning'
+                ]
+            },
+            'javascript': {
+                name: 'JavaScript',
+                icon: '⚡',
+                color: '#f59e0b',
+                examples: [
+                    'What are closures in JavaScript?',
+                    'Explain async/await with example',
+                    'Difference between == and ===',
+                    'What is hoisting in JavaScript?',
+                    'Explain event delegation',
+                    'What are promises in JavaScript?',
+                    'Explain "this" keyword in JavaScript',
+                    'What is prototype inheritance?'
+                ]
+            },
+            'python': {
+                name: 'Python',
+                icon: '🐍',
+                color: '#10b981',
+                examples: [
+                    'What are decorators in Python?',
+                    'Explain list comprehensions',
+                    'Difference between list and tuple',
+                    'How to handle exceptions in Python?',
+                    'Explain *args and **kwargs',
+                    'What are generators in Python?',
+                    'Explain OOP concepts in Python',
+                    'What are lambda functions?'
+                ]
+            },
+            'ds': {
+                name: 'Data Structures',
+                icon: '📊',
+                color: '#ef4444',
+                examples: [
+                    'Difference between array and linked list',
+                    'Explain binary search tree',
+                    'How hash table works?',
+                    'Explain stack data structure',
+                    'What are graphs in data structures?',
+                    'Explain queue data structure',
+                    'What are trees in data structures?',
+                    'Difference between stack and queue'
+                ]
+            },
+            'algo': {
+                name: 'Algorithms',
+                icon: '🔍',
+                color: '#8b5cf6',
+                examples: [
+                    'Explain QuickSort algorithm',
+                    'What is dynamic programming?',
+                    'Explain Dijkstra algorithm',
+                    'What is time complexity?',
+                    'Explain backtracking with example',
+                    'What is greedy algorithm?',
+                    'Explain divide and conquer approach',
+                    'What is Big O notation?'
+                ]
+            },
+            'react': {
+                name: 'React.js',
+                icon: '⚛️',
+                color: '#06b6d4',
+                examples: [
+                    'What are React hooks?',
+                    'Difference between state and props',
+                    'Explain React component lifecycle',
+                    'How to use Context API?',
+                    'Explain Virtual DOM',
+                    'Difference between useEffect and useMemo',
+                    'What are Higher Order Components?',
+                    'Explain React Router'
+                ]
+            }
+        };
+
+        // Initialize
+        function init() {
+            loadExamples();
+            updateSavedCount();
+            loadSavedItems();
+            showMessage('Welcome to CodeMaster! Select a subject and ask your question.', 'success');
+        }
+
+        // Show section
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(sectionId + '-section').classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Select subject
+        function selectSubject(subject) {
+            currentSubject = subject;
+            document.querySelectorAll('.subject-card').forEach(card => card.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById('currentSubject').innerHTML = `
+                <i class="fas fa-code"></i>
+                <span>${subjects[subject].name}</span>
+            `;
+            loadExamples();
+            showMessage(`Switched to ${subjects[subject].name}`, 'success');
+        }
+
+        // Load examples
+        function loadExamples() {
+            const container = document.getElementById('examples');
+            const examples = subjects[currentSubject].examples;
+            container.innerHTML = '';
+            examples.forEach(example => {
+                const btn = document.createElement('button');
+                btn.className = 'example-btn';
+                btn.textContent = example;
+                btn.onclick = () => {
+                    document.getElementById('problemInput').value = example;
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        // Solve problem
+        function solveProblem() {
+            const problem = document.getElementById('problemInput').value.trim();
+            if (!problem) {
+                showMessage('Please enter a question!', 'error');
+                return;
+            }
+            
+            currentProblem = problem;
+            const solution = generateTheoreticalAnswer();
+            currentSolution = solution;
+            openSolutionModal(solution);
+        }
+
+        // Generate theoretical answer
+        function generateTheoreticalAnswer() {
+            const problem = currentProblem.toLowerCase();
+            const subject = subjects[currentSubject];
+            
+            let solution = {
+                id: Date.now(),
+                title: `${subject.name}: ${currentProblem}`,
+                content: '',
+                type: 'theory',
+                subject: subject.name,
+                problem: currentProblem,
+                timestamp: new Date().toLocaleString(),
+                notes: ''
+            };
+
+            // C Programming Answers
+            if (currentSubject === 'c') {
+                if (problem.includes('pointer')) {
+                    solution.content = `
+                        <div class="theoretical-answer">
+                            <h3><i class="fas fa-code"></i> Pointers in C Programming</h3>
+                            
+                            <div class="definition">
+                                <h4><i class="fas fa-info-circle"></i> Definition</h4>
+                                <p>A pointer is a variable that stores the memory address of another variable. Pointers provide direct access to memory locations, enabling efficient memory management and complex data structures.</p>
+                            </div>
+                            
+                            <div class="theory-section">
+                                <h3><i class="fas fa-key"></i> Key Concepts</h3>
+                                <ul class="theory-points">
+                                    <li><strong>Declaration:</strong> <code>int *ptr;</code> declares pointer to integer</li>
+                                    <li><strong>Address Operator (&):</strong> <code>&var</code> returns address of var</li>
+                                    <li><strong>Dereference Operator (*):</strong> <code>*ptr</code> accesses value at address</li>
+                                    <li><strong>NULL Pointer:</strong> <code>int *ptr = NULL;</code> points to nothing</li>
+                                    <li><strong>Pointer Arithmetic:</strong> <code>ptr++</code> increments by sizeof(type)</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="example-practical">
+                                <h4><i class="fas fa-code"></i> Example</h4>
+                                <div class="code-block">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main() {
+    int num = 42;
+    int *ptr = &num;      // ptr stores address of num
+    
+    printf("Value of num: %d\\n", num);
+    printf("Address of num: %p\\n", &num);
+    printf("Value of ptr: %p\\n", ptr);
+    printf("Value pointed by ptr: %d\\n", *ptr);
+    
+    // Modifying value through pointer
+    *ptr = 100;
+    printf("New value of num: %d\\n", num);
+    
+    return 0;
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (problem.includes('array')) {
+                    solution.content = `
+                        <div class="theoretical-answer">
+                            <h3><i class="fas fa-code"></i> Arrays in C</h3>
+                            
+                            <div class="definition">
+                                <h4><i class="fas fa-info-circle"></i> Definition</h4>
+                                <p>An array is a collection of elements of the same type stored in contiguous memory locations. Arrays provide efficient access to elements using indices.</p>
+                            </div>
+                            
+                            <div class="example-practical">
+                                <h4><i class="fas fa-code"></i> Example</h4>
+                                <div class="code-block">
+<pre><code>#include &lt;stdio.h&gt;
+
+int main() {
+    // Array declaration and initialization
+    int numbers[5] = {10, 20, 30, 40, 50};
+    
+    // Accessing array elements
+    printf("First element: %d\\n", numbers[0]);
+    printf("Third element: %d\\n", numbers[2]);
+    
+    // Modifying array element
+    numbers[1] = 25;
+    
+    // Printing all elements
+    printf("All elements: ");
+    for(int i = 0; i < 5; i++) {
+        printf("%d ", numbers[i]);
+    }
+    
+    // Multi-dimensional array
+    int matrix[2][3] = {{1, 2, 3}, {4, 5, 6}};
+    
+    return 0;
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            // HTML & CSS Answers
+            else if (currentSubject === 'htmlcss') {
+                if (problem.includes('box model')) {
+                    solution.content = `
+                        <div class="theoretical-answer">
+                            <h3><i class="fas fa-code"></i> CSS Box Model</h3>
+                            
+                            <div class="definition">
+                                <h4><i class="fas fa-info-circle"></i> Definition</h4>
+                                <p>The CSS Box Model describes the rectangular boxes generated for elements in the document tree. Each box has content, padding, border, and margin areas.</p>
+                            </div>
+                            
+                            <div class="example-practical">
+                                <h4><i class="fas fa-code"></i> Example</h4>
+                                <div class="code-block">
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;style&gt;
+        .box {
+            width: 200px;
+            height: 100px;
+            padding: 20px;
+            border: 5px solid #2563eb;
+            margin: 30px;
+            background-color: #f0f9ff;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="box"&gt;
+        This is a box demonstrating CSS Box Model
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                                </div>
+                                <p><strong>Total width:</strong> 200px (content) + 40px (padding) + 10px (border) = 250px<br>
+                                <strong>Total height:</strong> 100px (content) + 40px (padding) + 10px (border) = 150px</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            // JavaScript Answers
+            else if (currentSubject === 'javascript') {
+                if (problem.includes('closure')) {
+                    solution.content = `
+                        <div class="theoretical-answer">
+                            <h3><i class="fas fa-code"></i> Closures in JavaScript</h3>
+                            
+                            <div class="definition">
+                                <h4><i class="fas fa-info-circle"></i> Definition</h4>
+                                <p>A closure is a function that retains access to variables from its outer (enclosing) scope even after the outer function has finished executing.</p>
+                            </div>
+                            
+                            <div class="example-practical">
+                                <h4><i class="fas fa-code"></i> Example</h4>
+                                <div class="code-block">
+<pre><code>// Basic closure example
+function outerFunction() {
+    let counter = 0;
+    
+    function innerFunction() {
+        counter++;
+        console.log('Counter:', counter);
+    }
+    
+    return innerFunction;
+}
+
+// Create closure
+const myClosure = outerFunction();
+
+// Each call remembers the counter value
+myClosure(); // Counter: 1
+myClosure(); // Counter: 2
+myClosure(); // Counter: 3
+
+// Practical use case: Private variables
+function createBankAccount(initialBalance) {
+    let balance = initialBalance;
+    
+    return {
+        deposit: function(amount) {
+            balance += amount;
+            console.log('Deposited:', amount, 'New balance:', balance);
+        },
+        withdraw: function(amount) {
+            if (amount <= balance) {
+                balance -= amount;
+                console.log('Withdrew:', amount, 'New balance:', balance);
+            } else {
+                console.log('Insufficient funds!');
+            }
+        },
+        getBalance: function() {
+            return balance;
+        }
+    };
+}
+
+const account = createBankAccount(1000);
+account.deposit(500);  // Deposited: 500 New balance: 1500
+account.withdraw(200); // Withdrew: 200 New balance: 1300</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Python Answers
+            else if (currentSubject === 'python') {
+                if (problem.includes('decorator')) {
+                    solution.content = `
+                        <div class="theoretical-answer">
+                            <h3><i class="fas fa-code"></i> Decorators in Python</h3>
+                            
+                            <div class="definition">
+                                <h4><i class="fas fa-info-circle"></i> Definition</h4>
+                                <p>A decorator is a function that takes another function as an argument, extends its behavior, and returns a modified function.</p>
+                            </div>
+                            
+                            <div class="example-practical">
+                                <h4><i class="fas fa-code"></i> Example</h4>
+                                <div class="code-block">
+<pre><code># Basic decorator example
+def simple_decorator(func):
+    def wrapper():
+        print("Before function execution")
+        func()
+        print("After function execution")
+    return wrapper
+
+@simple_decorator
+def say_hello():
+    print("Hello!")
+
+say_hello()
+# Output:
+# Before function execution
+# Hello!
+# After function execution
+
+# Decorator with arguments
+def timer_decorator(func):
+    import time
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        print(f"Function {func.__name__} took {end_time - start_time:.4f} seconds")
+        return result
+    return wrapper
+
+@timer_decorator
+def slow_function():
+    import time
+    time.sleep(1)
+    return "Done"
+
+print(slow_function())</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Data Structures Answers
+            else if (currentSubject === 'ds') {
+                if (problem.includes('array') && problem.includes('linked list')) {
+                    solution.content = `
+                        <div class="theoretical-answer">
+                            <h3><i class="fas fa-code"></i> Array vs Linked List</h3>
+                            
+                            <div class="comparison-table">
+                                <table>
+                                    <tr><th>Aspect</th><th>Array</th><th>Linked List</th></tr>
+                                    <tr><td><strong>Memory Allocation</strong></td><td>Contiguous memory</td><td>Non-contiguous memory</td></tr>
+                                    <tr><td><strong>Size</strong></td><td>Fixed (static)</td><td>Dynamic (can grow/shrink)</td></tr>
+                                    <tr><td><strong>Access Time</strong></td><td>O(1) - Direct access</td><td>O(n) - Sequential access</td></tr>
+                                    <tr><td><strong>Insertion/Deletion</strong></td><td>O(n) - Expensive</td><td>O(1) at beginning</td></tr>
+                                    <tr><td><strong>Memory Usage</strong></td><td>Less (no pointers)</td><td>More (extra pointers)</td></tr>
+                                </table>
+                            </div>
+                            
+                            <div class="theory-section">
+                                <h3><i class="fas fa-lightbulb"></i> When to Use Which?</h3>
+                                <ul class="theory-points">
+                                    <li><strong>Use Arrays when:</strong> You need random access, know the size in advance, memory is limited</li>
+                                    <li><strong>Use Linked Lists when:</strong> You need frequent insertions/deletions, size is unknown, memory allocation is dynamic</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Default answer for other questions
+            if (!solution.content) {
+                solution.content = `
+                    <div class="theoretical-answer">
+                        <h3><i class="fas fa-code"></i> ${currentProblem}</h3>
+                        
+                        <div class="definition">
+                            <h4><i class="fas fa-info-circle"></i> Comprehensive Answer</h4>
+                            <p>${currentProblem} is an important concept in ${subject.name} that merits detailed understanding. Let me break down this concept for you.</p>
+                        </div>
+                        
+                        <div class="theory-section">
+                            <h3><i class="fas fa-lightbulb"></i> Core Concept</h3>
+                            <p>${currentProblem} involves fundamental principles that are essential for mastering ${subject.name}.</p>
+                            <ul class="theory-points">
+                                <li><strong>Definition:</strong> The formal description and purpose</li>
+                                <li><strong>Syntax/Implementation:</strong> How it's written in code</li>
+                                <li><strong>Use Cases:</strong> Practical applications</li>
+                                <li><strong>Best Practices:</strong> Recommended approaches</li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            return solution;
+        }
+
+        function openSolutionModal(solution) {
+            const modal = document.getElementById('solutionModal');
+            const modalBody = document.getElementById('modalBody');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            modalTitle.textContent = solution.title;
+            
+            // Check if already saved
+            const isSaved = savedSolutions.some(s => s.id === solution.id);
+            
+            modalBody.innerHTML = solution.content + `
+                <div class="notes-modal" id="notesModal" style="display: none;">
+                    <h3><i class="fas fa-edit"></i> Add Personal Notes</h3>
+                    <textarea class="notes-textarea" id="notesTextarea" placeholder="Add your personal notes here..."></textarea>
+                    <div class="notes-actions">
+                        <button class="notes-btn cancel-notes-btn" onclick="cancelNotes()">Cancel</button>
+                        <button class="notes-btn save-notes-btn" onclick="saveNotes()">Save Notes</button>
+                    </div>
+                </div>
+                
+                <div class="actions">
+                    <button class="action-btn save-btn" onclick="${isSaved ? 'showMessage(\'Already saved!\', \'success\')' : 'saveCurrentSolution()'}">
+                        <i class="fas fa-save"></i> ${isSaved ? 'Already Saved' : 'Save Solution'}
+                    </button>
+                    <button class="action-btn new-btn" onclick="newProblem()">
+                        <i class="fas fa-plus"></i> New Question
+                    </button>
+                    <button class="action-btn notes-btn" onclick="showNotesModal()">
+                        <i class="fas fa-edit"></i> Add Notes
+                    </button>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('solutionModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function showNotesModal() {
+            document.getElementById('notesModal').style.display = 'block';
+        }
+
+        function cancelNotes() {
+            document.getElementById('notesModal').style.display = 'none';
+        }
+
+        function saveNotes() {
+            const notes = document.getElementById('notesTextarea').value.trim();
+            if (notes) {
+                currentSolution.notes = notes;
+                showMessage('Notes saved successfully!', 'success');
+                document.getElementById('notesModal').style.display = 'none';
+            }
+        }
+
+        function saveCurrentSolution() {
+            if (currentSolution) {
+                // Add solution to saved items
+                savedSolutions.push(currentSolution);
+                localStorage.setItem('savedSolutions', JSON.stringify(savedSolutions));
+                
+                updateSavedCount();
+                loadSavedItems();
+                showMessage('Solution saved successfully!', 'success');
+                
+                // Update the save button in modal
+                const saveBtn = document.querySelector('.save-btn');
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> Already Saved';
+                saveBtn.onclick = () => showMessage('Already saved!', 'success');
+            }
+        }
+
+        function newProblem() {
+            document.getElementById('problemInput').value = '';
+            closeModal();
+            showMessage('Ready for a new question!', 'success');
+        }
+
+        function updateSavedCount() {
+            const savedCount = savedSolutions.length;
+            document.getElementById('savedCount').textContent = savedCount;
+        }
+
+        function loadSavedItems() {
+            const container = document.getElementById('savedItems');
+            const emptyState = document.getElementById('emptySavedState');
+            
+            if (savedSolutions.length === 0) {
+                emptyState.style.display = 'block';
+                container.innerHTML = '';
+                container.appendChild(emptyState);
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            container.innerHTML = '';
+            
+            savedSolutions.forEach((solution, index) => {
+                const item = document.createElement('div');
+                item.className = 'saved-item';
+                item.innerHTML = `
+                    <div class="saved-item-header">
+                        <div>
+                            <h4>${solution.problem}</h4>
+                            <small>${solution.timestamp}</small>
+                        </div>
+                        <span class="saved-item-subject">${solution.subject}</span>
+                    </div>
+                    <div class="saved-item-content">
+                        <p>${solution.problem} - Click to view details</p>
+                        ${solution.notes ? `
+                            <div class="saved-item-notes">
+                                <strong><i class="fas fa-sticky-note"></i> Your Notes:</strong>
+                                <p>${solution.notes}</p>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                
+                item.onclick = () => {
+                    currentSolution = solution;
+                    openSolutionModal(solution);
+                    showSection('ask');
+                };
+                
+                container.appendChild(item);
+            });
+        }
+
+        function showMessage(text, type) {
+            const message = document.createElement('div');
+            message.className = `message ${type}`;
+            message.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${text}</span>
+            `;
+            
+            document.body.appendChild(message);
+            
+            setTimeout(() => {
+                message.style.opacity = '0';
+                message.style.transform = 'translateX(100%)';
+                setTimeout(() => message.remove(), 300);
+            }, 3000);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('solutionModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
